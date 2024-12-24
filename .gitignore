@@ -1,5 +1,6 @@
 video
 output
 logs
+*.pt
 __pycache__
 *.dll
