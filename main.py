@@ -18,7 +18,7 @@ if __name__ == '__main__':
     output_file = Path(os.path.abspath(output_file))
     output_file_name = output_file.name
     output_folder = output_file.parent
-    output_file.parent.mkdir(exists_ok=True, parents=True)
+    output_file.parent.mkdir(exist_ok=True, parents=True)
     
     logger.info("Arguments are:")
     logger.info(f"Input path: {str(input_file)}")
