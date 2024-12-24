@@ -1,0 +1,5 @@
+{
+    "max_age": 60,
+    "max_iou_distance": 0.5,
+    "n_init": 4
+}
