@@ -1,10 +1,14 @@
 import logging
+from pathlib import Path
+import os
 
 def setup_logger(name: str, verbose: bool) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
-    file_handler = logging.FileHandler(filename='./logs/latest.log', mode='a+')
+    log_path = Path(os.path.abspath('./logs/latest.log'))
+    log_path.parent.mkdir(exist_ok=True, parents=True)                    
+    file_handler = logging.FileHandler(filename=log_path, mode='a+')
 
     console_handler.setLevel(logging.INFO)
     file_handler.setLevel(logging.DEBUG)
