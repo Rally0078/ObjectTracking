@@ -25,34 +25,30 @@ if __name__ == '__main__':
                            type=str, action='store',
                            help='Input video file path',
                            required=True)
-    argparse.add_argument('-o', '--output',
+    argparser.add_argument('-o', '--output',
                           type=str, action='store',
                           help='Output video file path with all the bounding boxes.',
                           required=True)
-    argparse.add_argument('-m', '--model',
-                          type=str, action='store',
+    argparser.add_argument('-m', '--model',
+                          type=check_model, action='store',
                           metavar='coco|fudan',
                           help='The model to use (coco or fudan). By default it is coco.',
-                          type=check_model,
                           default='coco')
-    argparse.add_argument('-v','--verbose',
-                          type=bool, action='store_true',
+    argparser.add_argument('-v','--verbose',
+                          action='store_true',
                           help='Show more info on the console.',
                           default=False)
-    argparse.add_argument('-d', '--display',
-                          type=bool, action='store_true',
+    argparser.add_argument('-d', '--display',
+                          action='store_true',
                           help='Show the video with inference in a new window realtime.',
                           default=False)
     args = argparser.parse_args()
 
-    input_file = args.input.strip(r'\/')
-    input_file = input_file.strip(r'"')
-    input_file = Path(os.path.normpath(input_file))
-
-    output_file = args.output.strip(r'\/')
-    output_file = input_file.strip(r'"')
-    output_file = Path(os.path.normpath(input_file))
-    output_file = args.output.strip(r'\/')
+    input_file = args.input
+    input_file = Path(os.path.abspath(input_file))
+    
+    output_file = args.output
+    output_file = Path(os.path.abspath(output_file))
 
     print(f"Arguments are:")
     print(f"Input path: {str(input_file)}")
