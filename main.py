@@ -1,4 +1,6 @@
 import os
+#If Windows errors out by trying to load multiple OpenMP DLLs(some dependency issue)
+#os.environ['KMP_DUPLICATE_LIB_OK']='TRUE'
 from pathlib import Path
 from utils.logger import setup_logger
 from utils.arghandling import setup_arghandler

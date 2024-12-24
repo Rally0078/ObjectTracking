@@ -2,3 +2,4 @@ video
 output
 logs
 __pycache__
+*.dll
