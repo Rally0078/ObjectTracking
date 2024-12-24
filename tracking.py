@@ -155,15 +155,16 @@ while cap.isOpened():
         object_times[track_id]["exit_time"] = cap.get(cv2.CAP_PROP_POS_MSEC)  # Update exit time every frame the object is tracked
 
         x1, y1, x2, y2 = track.to_tlbr()  # Returns bounding box in the (x1, y1, x2, y2) format
+        x_center, y_center = (x1+x2)//2, (y1+y2)//2   #Get center of box
 
         #Draw trajectory of the bounding box
-        object_times[track_id]["trajectory"].append((x1,y1,x2,y2))
+        object_times[track_id]["trajectory"].append((x_center,y_center))
         traj = object_times[track_id]["trajectory"]
-        if(len(traj) >= 2):
-            for i in range(1, len(traj)):
-                cv2.line(frame, (int(traj[i-1][0]), int(traj[i-1][1])), 
+        for i in range(1, len(traj)):
+            cv2.line(frame, (int(traj[i-1][0]), int(traj[i-1][1])), 
                      (int(traj[i][0]), int(traj[i][1])), (0, 0, 255), 2)
-                
+        #Draw circle at centroid
+        cv2.circle(frame, (int(x_center), int(y_center)), 4, (255, 255, 0), -1)
         #Draw bounding box
         cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
         cv2.putText(frame, f"ID: {track_id} Cls = {det_cls}", (int(x1), int(y1)-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
