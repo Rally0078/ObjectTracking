@@ -1,3 +1,7 @@
 *.ipynb
 *.mp4
+output/
+logs/
+*.pt
+utils/
 __pycache__
