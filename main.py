@@ -31,7 +31,7 @@ if __name__ == '__main__':
     #tracker.run()
     logger.debug(f"Object Tracker finished its job")
     #Output HTML
-    with open(output_folder / 'videoplayback.html', 'w') as f:
+    with open(output_folder / 'videoplayback.html', 'w+') as f:
         f.write(f"""<!DOCTYPE html>
     <html>
         <body>
