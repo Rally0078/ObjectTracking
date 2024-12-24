@@ -29,7 +29,7 @@ if __name__ == '__main__':
     logger.debug(f"DeepSort config: {os.path.abspath('./config/deepsort.json')}")
     tracker = ObjectTracker(input_file, output_file, args.model, args.verbose, args.display, args.device)
     logger.debug(f"Object Tracker created")
-    #tracker.run()
+    tracker.run()
     logger.debug(f"Object Tracker finished its job")
     #Output HTML
     with open(output_folder / 'videoplayback.html', 'w+') as f:
