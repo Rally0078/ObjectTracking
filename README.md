@@ -6,6 +6,13 @@ COCO trained weights as well as COCO trained Fudan pedestrian dataset fine-tuned
 
 ### Usage:
 
+Create conda environment and activate:
+
+```bash
+    conda env create -f environment.yml
+    conda activate objtracking
+```
+
 Explicitly define model and device: 
 
 ```bash
