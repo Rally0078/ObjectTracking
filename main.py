@@ -13,6 +13,8 @@ if __name__ == '__main__':
 
     logger = setup_logger('Main', args.verbose)
     logger.info(f"Logging started")
+
+    #Get input file's path
     try:
         input_file = args.input
         input_file = Path(os.path.abspath(input_file))
@@ -21,18 +23,15 @@ if __name__ == '__main__':
     except FileNotFoundError:
         logger.info(f"An error occurred! Input file at {input_file} is not found!")
         sys.exit(1)
-    
-    try:
-        output_file = args.output
-        output_file = Path(os.path.abspath(output_file))
-        if os.path.exists(output_file.parent) and not os.path.exists(output_file.parent.parent):
-            raise FileNotFoundError
-    except FileNotFoundError:
-        logger.info(f"An error occurred! The directory {output_file.parent.parent} does not exist!")
-        sys.exit(1)
+
+    #Get output file's path
+    output_file = args.output
+    output_file = Path(os.path.abspath(output_file))
     
     output_file_name = output_file.name
     output_folder = output_file.parent
+
+    #Make new directory if not exists
     output_file.parent.mkdir(exist_ok=True, parents=True)
     
     logger.info("Arguments are:")
@@ -41,11 +40,20 @@ if __name__ == '__main__':
     logger.info(f"Model: {args.model}")
     logger.info(f"Verbose: {args.verbose}")
     logger.info(f"Display OpenCV window: {args.display}")
+
+    #Todo: Replace JSON with a YML config
     logger.debug(f"DeepSort config: {os.path.abspath('./config/deepsort.json')}")
+    #instantiate ObjectTracker object
+
+    #Todo: Have the option to inject model as dependency instead of hardcoding it in the class
     tracker = ObjectTracker(input_file, output_file, args.model, args.verbose, args.display, args.device)
     logger.debug(f"Object Tracker created")
+
+    #Start tracking and save results when finished
     tracker.run()
+
     logger.debug(f"Object Tracker finished its job")
+    
     #Output HTML
     with open(output_folder / 'videoplayback.html', 'w+') as f:
         f.write(f"""<!DOCTYPE html>
