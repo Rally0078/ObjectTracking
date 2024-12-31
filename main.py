@@ -19,7 +19,7 @@ if __name__ == '__main__':
         if not os.path.exists(input_file):
             raise FileNotFoundError
     except FileNotFoundError:
-        logger.log(f"An error occurred! Input file at {input_file} is not found!")
+        logger.info(f"An error occurred! Input file at {input_file} is not found!")
         sys.exit(1)
     
     try:
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         if not os.path.exists(output_file.parent.parent):
             raise FileNotFoundError
     except FileNotFoundError:
-        logger.log(f"An error occurred! The directory {output_file.parent.parent} does not exist!")
+        logger.info(f"An error occurred! The directory {output_file.parent.parent} does not exist!")
         sys.exit(1)
     
     output_file_name = output_file.name
