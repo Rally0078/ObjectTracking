@@ -21,8 +21,11 @@ class ObjectTracker:
         self.coco_classes = coconames
         
         self.model_name = model_name
+        #Automatic device selection
         self.device = self._get_device(device_name)
         self.display = display
+        #Model selection
+        #Todo: Dependency injection to pick the object detection model.
         if self.model_name == 'coco':
             self.model = models.detection.fasterrcnn_resnet50_fpn_v2(
                 weights=models.detection.FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT).to(self.device)
@@ -30,7 +33,7 @@ class ObjectTracker:
             self.model = torch.load('model_weights/model_state_dict.pt', weights_only=False).to(self.device)
         self.input_path = input_file
         self.output_path = output_file
-
+        #Load config for deepsort hyperparameters. Could possibly pass this as argument, and switch to YAML instead of JSON.
         with open(os.path.abspath('./config/deepsort.json')) as f:
             self.deepsort_cfg = json.load(f)
         
@@ -46,6 +49,7 @@ class ObjectTracker:
     
     def run(self):
         self.model = self.model.eval()
+        #DeepSORT algorithm, by default there is no deep embedder used as in this case.
         self.deepsort = DeepSort(max_age=self.max_age, max_iou_distance=self.max_iou_distance, n_init=self.n_init)
         transform = transforms.Compose([transforms.ToTensor()])
 
@@ -55,6 +59,7 @@ class ObjectTracker:
         self.logger.debug("Video output writer opened")
         frame_count = 0
         self.object_times = {}
+        #Could be in a config instead of harcoding it
         self.score_threshold = 0.9
 
         while cap.isOpened():
@@ -179,8 +184,15 @@ class ObjectTracker:
         return writer
     
     def _output_tracks(self):
+        #Make dataframe of tracks with classes, classname, entry time(ms), and exit time(ms)
         df = pd.DataFrame.from_dict(self.object_times, orient='index', columns=['cls', 'cls_name', 'trajectory', 'entry_time', 'exit_time'])
+
+        #Drop the trajectory column, not needed
         df.drop(labels='trajectory',axis=1, inplace=True)
+        #Index each row in the dataframe with the unique trackid of the objects
         df.index.name ="track_id"
-        df.to_csv('output/objects.csv')
-        self.logger.info("Object track details saved in output/objects.csv")
+
+        #Save with the same name and location of the output video file, but with a csv extension
+        output_file_name = self.output_path.with_suffix(".csv")
+        df.to_csv(output_file_name)
+        self.logger.info(f"Object track details saved in {output_file_name}")
