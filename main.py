@@ -25,7 +25,7 @@ if __name__ == '__main__':
     try:
         output_file = args.output
         output_file = Path(os.path.abspath(output_file))
-        if not os.path.exists(output_file.parent.parent):
+        if os.path.exists(output_file.parent) and not os.path.exists(output_file.parent.parent):
             raise FileNotFoundError
     except FileNotFoundError:
         logger.info(f"An error occurred! The directory {output_file.parent.parent} does not exist!")
