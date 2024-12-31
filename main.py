@@ -1,4 +1,5 @@
 import os
+import sys
 #If Windows errors out by trying to load multiple OpenMP DLLs(some dependency issue)
 #os.environ['KMP_DUPLICATE_LIB_OK']='TRUE'
 from pathlib import Path
@@ -12,12 +13,24 @@ if __name__ == '__main__':
 
     logger = setup_logger('Main', args.verbose)
     logger.info(f"Logging started")
-
-    input_file = args.input
-    input_file = Path(os.path.abspath(input_file))
+    try:
+        input_file = args.input
+        input_file = Path(os.path.abspath(input_file))
+        if not os.path.exists(input_file):
+            raise FileNotFoundError
+    except FileNotFoundError:
+        logger.log(f"An error occurred! Input file at {input_file} is not found!")
+        sys.exit(1)
     
-    output_file = args.output
-    output_file = Path(os.path.abspath(output_file))
+    try:
+        output_file = args.output
+        output_file = Path(os.path.abspath(output_file))
+        if not os.path.exists(output_file.parent.parent):
+            raise FileNotFoundError
+    except FileNotFoundError:
+        logger.log(f"An error occurred! The directory {output_file.parent.parent} does not exist!")
+        sys.exit(1)
+    
     output_file_name = output_file.name
     output_folder = output_file.parent
     output_file.parent.mkdir(exist_ok=True, parents=True)
